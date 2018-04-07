@@ -1,0 +1,17 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "dependencies": {
+    "@google/maps": "^0.4.5",
+    "actions-on-google": "^1.2.0",
+    "cities": "^1.1.2",
+    "city-reverse-geocoder": "0.0.1",
+    "firebase-admin": "~4.2.1",
+    "firebase-functions": "^0.5.7",
+    "geocoder": "^0.2.3",
+    "import-file": "^1.2.2",
+    "node-geocoder": "^3.21.1",
+    "request": "^2.81.0"
+  },
+  "private": false
+}
