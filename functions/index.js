@@ -143,7 +143,12 @@ function summary(assistant) {
           }
 
           // Create response
-          assistant.ask("Tonight there are " + num_events + " events in " + assistant.data.deviceCity + ". Want to learn more?");
+          if (num_events > 0) {
+            assistant.ask("Tonight there are " + num_events + " events in " + assistant.data.deviceCity + ". Want to learn more?");
+          }
+          else {
+          assistant.tell("Bummer! I can't find a good club party going on tonight in " + assistant.data.deviceCity + ". Netflix and chill, maybe ?");
+        }
         
         }); 
 
