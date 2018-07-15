@@ -42,31 +42,20 @@ exports.module = functions.https.onRequest((req, response) => {
 
 
 function welcome(assistant) {
-  // Request permission to access location to define city
-  if (assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT) == false) {
-	assistant.askForPermission("It's party time! I'm your party assistant and I'll help you find the best parties going on tonight. To get the event listings for your city", assistant.SupportedPermissions.DEVICE_COARSE_LOCATION);
-  }
-  else if (assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT)) {
-    assistant.askForPermission("It's party time! I'm your party assistant and I'll help you find the best parties going on tonight. To get the event listings for your city", assistant.SupportedPermissions.DEVICE_PRECISE_LOCATION);
+
+	assistant.askForPermission("It's party time! I'm your party assistant and I'll help you find the best parties going on tonight. To get the event listings for your city", assistant.SupportedPermissions.DEVICE_PRECISE_LOCATION);
+ 
   }
 
-}
 
 
 function summary(assistant) {
 	
 	if (assistant.isPermissionGranted()) {
-	    if (assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT) == false) {
-      // Request the user's device city
-	     let deviceCity = assistant.getDeviceLocation().city;
-	     console.log(deviceCity);
-	     assistant.data.deviceCity = deviceCity;
-	     locate();
-	    }
-	    else if (assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT)) {
-        // Request the user's device geocoordinates as screen surfaces (phones) don't return a city field
+
+        // Request the user's device geocoordinates a
 	      let deviceCoordinates = assistant.getDeviceLocation().coordinates;
-	      console.log(deviceCoordinates);
+	      console.log("coordonnees mobile", deviceCoordinates);
 	      let lat = deviceCoordinates.latitude;
 	      let lng = deviceCoordinates.longitude;
 	      googleMapsClient.reverseGeocode({
@@ -85,7 +74,7 @@ function summary(assistant) {
 
               if(loc.length == 1)
               {
-                console.log(loc[0].long_name);
+                console.log("nom de la ville phone", loc[0].long_name);
                 // Assign field long name (common name of city) of object of type locality to device city
                 let deviceCity = loc[0].long_name;
                 assistant.data.deviceCity = deviceCity;
@@ -96,15 +85,14 @@ function summary(assistant) {
               }
 			        
 	      	}
+        
      	});
+ 	  
+  }
 
-
-    }
-    else {
+     else {
       assistant.tell("Too bad, I'll be there waiting for you if you change your mind!")
     }
- 	  console.log(assistant.data.deviceCity);
-  }
 }
 
   function locate(){
@@ -188,14 +176,14 @@ function tonight(assistant) {
           let event = response[0]['pageFunctionResult'][index]['Event'];
           console.log(assistant.data.index);
           assistant.data.event = event;
-          assistant.ask(assistant.data.event + ". To move on to the next event, just say 'next'. You can also ask about the lineup to hear who's playing");
+          assistant.ask(assistant.data.event + ". Do you want to hear the lineup or move on to the next event?");
           }
           else if (assistant.data.index < num_events) {
             //Iterate through the events
           let event = response[0]['pageFunctionResult'][index]['Event'];
           console.log(assistant.data.index);
           assistant.data.event = event;
-          assistant.ask(assistant.data.event + ". Move on to the next event or hear the lineup?");
+          assistant.ask(assistant.data.event + ". Hear the lineup or move on?");
           }
           else {
             // Close the conversation with a greeting when all events have been uttered
