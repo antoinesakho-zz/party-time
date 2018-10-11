@@ -70,7 +70,7 @@ function summary(assistant) {
 			          if (item.types.indexOf('locality') !== -1){
 			          	loc.push(item);
 			          }
-			        });
+			        }); 
 
               if(loc.length == 1)
               {
