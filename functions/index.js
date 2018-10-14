@@ -42,16 +42,30 @@ exports.module = functions.https.onRequest((req, response) => {
 
 
 function welcome(assistant) {
-
-	assistant.askForPermission("It's party time! I'm your party assistant and I'll help you find the best parties going on tonight. To get the event listings for your city", assistant.SupportedPermissions.DEVICE_PRECISE_LOCATION);
- 
+  // Request permission to access location to define city
+  if (assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT) == false) {
+  assistant.askForPermission("It's party time! I'm your party assistant and I'll help you find the best parties going on tonight. To get the event listings for your city", assistant.SupportedPermissions.DEVICE_COARSE_LOCATION);
   }
+  else if (assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT)) {
+    assistant.askForPermission("It's party time! I'm your party assistant and I'll help you find the best parties going on tonight. To get the event listings for your city", assistant.SupportedPermissions.DEVICE_PRECISE_LOCATION);
+  }
+ }
+
 
 
 
 function summary(assistant) {
 	
 	if (assistant.isPermissionGranted()) {
+
+          if (assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT) == false) {
+      // Request the user's device city
+       let deviceCity = assistant.getDeviceLocation().city;
+       console.log(deviceCity);
+       assistant.data.deviceCity = deviceCity;
+       locate();
+      }
+      else if (assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT)) {
 
         // Request the user's device geocoordinates a
 	      let deviceCoordinates = assistant.getDeviceLocation().coordinates;
@@ -87,6 +101,8 @@ function summary(assistant) {
 	      	}
         
      	});
+
+      }
  	  
   }
 
