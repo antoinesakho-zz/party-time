@@ -55,7 +55,7 @@ function summary(assistant) {
 
         // Request the user's device geocoordinates a
 	      let deviceCoordinates = assistant.getDeviceLocation().coordinates;
-	      console.log("coordonnees mobile", deviceCoordinates);
+	      console.log("mobile coordinates:", deviceCoordinates);
 	      let lat = deviceCoordinates.latitude;
 	      let lng = deviceCoordinates.longitude;
 	      googleMapsClient.reverseGeocode({
@@ -63,7 +63,7 @@ function summary(assistant) {
           latlng:[lat+","+lng]
         }, function(err, response) {
 	        if (!err) {
-	        	var address_components = response.json.results[2].address_components;
+	        	var address_components = response.json.results[5].address_components;
 			        var loc = [];
               // Iterate through Google Maps response object to find objects of type "locality"
 			        address_components.forEach(function(item){
@@ -72,9 +72,9 @@ function summary(assistant) {
 			          }
 			        }); 
 
-              if(loc.length == 1)
+              if(loc)
               {
-                console.log("nom de la ville phone", loc[0].long_name);
+                console.log("city name:", loc[0].long_name);
                 // Assign field long name (common name of city) of object of type locality to device city
                 let deviceCity = loc[0].long_name;
                 assistant.data.deviceCity = deviceCity;
@@ -111,6 +111,9 @@ function summary(assistant) {
         break;
         case "Los Angeles":
         assistant.data.path = '/v1/A2nDsSwJTYx5Y2XRt/crawlers/xXfqm4nqBsTxXgE3y/lastExec/results?token=NovCBWFE8j3TmPk9LpRkoh87W';
+        break;
+        case "Berlin":
+        assistant.data.path = '/v1/A2nDsSwJTYx5Y2XRt/crawlers/CN6FfyREtehrK4BWF/lastExec/results?token=EHA6rAFCXGeFD9cCB85FY6qBg';
         break;
         default: assistant.tell("Sorry, I can't get event listings for your city just yet, but I'm working on it. Email us so we can make it a priority. Thanks and enjoy the night!")
       }
